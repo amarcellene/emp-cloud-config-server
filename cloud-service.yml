@@ -1,0 +1,35 @@
+server:
+  port: 8998
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true                          
+      routes:
+      - id: google_route
+        uri: http://www.google.com
+        predicates:
+        - Path=/
+        #- RewritePath=/(?<path>.*), /$\{path}
+      - id: enrollment_route
+        uri: http://localhost:8080/api/v1/members/4/enrollments
+        predicates:
+        - Path=/enr
+        #- RewritePath=/enr/(?<path>.*), /$\{path}
+        #filters: 
+        #- AddRequestHeader=mp-group, 153031
+        
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+        
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.http.server.reactive: INFO
+    org.springframework.web.reactive: INFO
+reactor.ipc.netty: INFO        
